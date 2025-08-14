@@ -1,5 +1,8 @@
-import { SVGProps } from "react";
-const Logo = (props: SVGProps<SVGSVGElement>) => (
+import type { HTMLAttributes, JSX } from "react";
+
+interface LogoProps extends HTMLAttributes<HTMLDivElement> {}
+
+const Logo = ({ className, ...props }: LogoProps): JSX.Element => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="50"
@@ -7,7 +10,6 @@ const Logo = (props: SVGProps<SVGSVGElement>) => (
     fill="none"
     viewBox="0 0 50 50"
     className="text-primary"
-    {...props}
   >
     <rect width="50" height="50" fill="#fff" rx="12"></rect>
     <mask
@@ -18,7 +20,6 @@ const Logo = (props: SVGProps<SVGSVGElement>) => (
       y="0"
       maskUnits="userSpaceOnUse"
       style={{ maskType: "luminance" }}
-      
     >
       <rect width="50" height="50" fill="#fff" rx="12"></rect>
     </mask>

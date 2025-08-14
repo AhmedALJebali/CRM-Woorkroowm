@@ -3,18 +3,10 @@ import { z } from "zod";
 export const profileSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
-
-  age: z.preprocess((val) => {
-    if (val === "" || val === null || val === undefined) {
-      return undefined;
-    }
-    const num = Number(val);
-    return isNaN(num) ? NaN : num;
-  }, z.number({ invalid_type_error: "Age must be a number" }).int("Age must be an integer").min(1, "Age must be at least 1").max(120, "Age must be less than or equal to 120")),
+  age: z.coerce.number().int().positive(),
 
   gender: z.enum(["male", "female", "other"], {
-    required_error: "Gender is required",
-    invalid_type_error: "Gender must be one of 'male', 'female' or 'other'",
+    error: "Gender is required",
   }),
   country: z.string().min(1, "Country is required"),
 

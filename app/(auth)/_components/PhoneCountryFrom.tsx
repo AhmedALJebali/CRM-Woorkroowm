@@ -22,9 +22,15 @@ import { UseFormReturn } from "react-hook-form";
 interface PhoneCountryFormProps {
   form: UseFormReturn<ProfileFormData>;
 }
+type CountryInfo = {
+  code: number;
+  name: string;
+  placeholder: string;
+};
 
+type CountryData = Record<string, CountryInfo>;
 export default function PhoneCountryForm({ form }: PhoneCountryFormProps) {
-  const countryData = useMemo(
+  const countryData: CountryData = useMemo<CountryData>(
     () => ({
       EG: { code: 20, name: "Egypt", placeholder: "100 000 0000" },
       SA: { code: 966, name: "Saudi Arabia", placeholder: "5 000 0000" },
@@ -35,31 +41,28 @@ export default function PhoneCountryForm({ form }: PhoneCountryFormProps) {
     []
   );
 
- 
   const country = form.getValues("country");
-  const countryCode = form.getValues("countryCode");
 
-  const phonePlaceholder =
+  const phonePlaceholder: string =
     (country && countryData[country]?.placeholder) || "100 000 0000";
 
   return (
     <div className="grid grid-cols-2 gap-4">
-      {/* اختيار البلد */}
+     
       <div className="w-full">
         <FormField
           control={form.control}
           name="country"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="country" className="font-semibold">
-                Country
-              </FormLabel>
+              <FormLabel className="font-semibold">Country</FormLabel>
               <FormControl>
                 <Select
                   value={field.value}
                   onValueChange={(val) => {
                     field.onChange(val);
 
+                    // تحديث كود الدولة تلقائياً عند تغيير الدولة
                     if (val && countryData[val]) {
                       const code = countryData[val].code;
                       if (form.getValues("countryCode") !== code) {
@@ -72,7 +75,9 @@ export default function PhoneCountryForm({ form }: PhoneCountryFormProps) {
                 >
                   <SelectTrigger className="w-full">
                     <div className="truncate">
-                      {field.value ? countryData[field.value]?.name : "Country"}
+                      {field.value
+                        ? countryData[field.value]?.name
+                        : "Select Country"}
                     </div>
                   </SelectTrigger>
                   <SelectContent>
@@ -89,23 +94,25 @@ export default function PhoneCountryForm({ form }: PhoneCountryFormProps) {
           )}
         />
       </div>
-      <div className="flex flex-col justify-between w-full">
-        <FormLabel htmlFor="phoneNumber" className="font-semibold">
-          Phone Number
-        </FormLabel>
-        <div className="w-full flex gap-2 ">
+
+      {/* كود الدولة + رقم الهاتف */}
+      <div className="flex flex-col w-full">
+        <FormLabel className="font-semibold">Phone Number</FormLabel>
+        <div className="flex gap-2">
+          {/* كود الدولة */}
           <FormField
             control={form.control}
             name="countryCode"
             render={({ field }) => (
-              <FormItem className="w-[20%]">
+              <FormItem className="w-[25%]">
                 <FormControl>
                   <Select
                     value={field.value ? String(field.value) : ""}
                     onValueChange={(val) => {
-                      const numCode = Number(val); // نحوله لنمبر عشان يطابق zod.number()
+                      const numCode = Number(val);
                       field.onChange(numCode);
 
+                      // تحديث الدولة تلقائياً عند تغيير الكود
                       const found = Object.entries(countryData).find(
                         ([, valObj]) => valObj.code === numCode
                       );
@@ -119,7 +126,7 @@ export default function PhoneCountryForm({ form }: PhoneCountryFormProps) {
                       }
                     }}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger>
                       <SelectValue placeholder="Code" />
                     </SelectTrigger>
                     <SelectContent>
@@ -136,6 +143,7 @@ export default function PhoneCountryForm({ form }: PhoneCountryFormProps) {
             )}
           />
 
+          {/* رقم الهاتف */}
           <FormField
             control={form.control}
             name="phoneNumber"
@@ -144,7 +152,6 @@ export default function PhoneCountryForm({ form }: PhoneCountryFormProps) {
                 <FormControl>
                   <Input
                     {...field}
-                    id="phoneNumber"
                     placeholder={phonePlaceholder}
                     inputMode="numeric"
                   />

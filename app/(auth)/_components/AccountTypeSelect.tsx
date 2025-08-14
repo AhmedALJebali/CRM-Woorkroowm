@@ -1,11 +1,10 @@
 "use client";
-
 import { Button } from "@/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function AccountTypeStep() {
+export default function AccountTypeSelect() {
   const [selected, setSelected] = useState<string | null>(null);
   const router = useRouter();
 

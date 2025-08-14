@@ -18,17 +18,12 @@ export function useCompleteProfileForm() {
     defaultValues: {
       firstName: "",
       lastName: "",
-      age: undefined,
+      age: 18, 
       gender: "other",
       country: "",
       phoneNumber: "",
       avatarUrl: "",
       countryCode: 20,
-      // companyStatus: "new",
-      // selectedCompany: "",
-      // companyName: "",
-      // companySize: "",
-      // teamMembers: [],
     },
   });
 

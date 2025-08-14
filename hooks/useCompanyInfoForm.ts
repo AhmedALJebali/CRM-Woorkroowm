@@ -27,10 +27,14 @@ export function useCompanyForm(defaultValues?: Partial<CompanyFormData>) {
   const form = useForm<CompanyFormData>({
     resolver: zodResolver(companySchema),
     defaultValues: {
-      companyStatus: "existing",
       companyName: "",
+      companyEmail: "",
+      companyPhone: "",
+      companyCountry: "",
+      companyCity: "",
       businessDirection: "",
       teamSize: "",
+      companyLogo: "",
       ...defaultValues,
     },
   });
@@ -52,6 +56,6 @@ export function useCompanyForm(defaultValues?: Partial<CompanyFormData>) {
     filteredCompanies,
     noMatch,
     existingCompanies,
-    teamSizeOptions
+    teamSizeOptions,
   };
 }
